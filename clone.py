@@ -16,8 +16,7 @@ os.makedirs(TEMP_DIR, exist_ok=True)
 # Arquivo de checkpoint para permitir retomar de onde parou
 CHECKPOINT_FILE = "checkpoint.json"
 
-# Quantas mensagens do destino verificar para detectar duplicatas
-LIMITE_VERIFICACAO_DESTINO = 500
+
 
 
 def carregar_checkpoint():
@@ -77,7 +76,7 @@ async def carregar_hashes_destino(app, destino, sent_hashes):
     print(f"Verificando mensagens do destino para detectar duplicatas...")
     qtd = 0
     added = 0
-    async for mensagem in app.get_chat_history(destino.id, limit=LIMITE_VERIFICACAO_DESTINO):
+    async for mensagem in app.get_chat_history(destino.id):
         qtd += 1
         h = calcular_hash_media(mensagem)
         if h and h not in set_hashes:
