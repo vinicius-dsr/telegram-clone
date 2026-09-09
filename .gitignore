@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+*.session
+checkpoint.json
+temp_telegram_clone/
+.env
