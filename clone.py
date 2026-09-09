@@ -6,8 +6,21 @@ import sys
 from hydrogram import Client
 from hydrogram.errors import FloodWait
 
-api_id = int(input("API ID: "))
-api_hash = input("API Hash: ").strip()
+SESSION_NAME = "minha_sessao"
+SESSION_FILE = f"{SESSION_NAME}.session"
+CREDENTIALS_FILE = "credentials.json"
+
+if os.path.exists(SESSION_FILE):
+    with open(CREDENTIALS_FILE, "r") as f:
+        creds = json.load(f)
+    api_id = creds["api_id"]
+    api_hash = creds["api_hash"]
+    print("Sessão encontrada. Reutilizando credenciais salvas.")
+else:
+    api_id = int(input("API ID: "))
+    api_hash = input("API Hash: ").strip()
+    with open(CREDENTIALS_FILE, "w") as f:
+        json.dump({"api_id": api_id, "api_hash": api_hash}, f)
 
 # Pasta temporária para salvar os downloads antes do upload
 TEMP_DIR = "temp_telegram_clone"
@@ -108,7 +121,7 @@ async def main():
     hashes_registrados = checkpoint["sent_hashes"]
     hashes_midia = set(hashes_registrados)
 
-    async with Client("minha_sessao", api_id, api_hash) as app:
+    async with Client(SESSION_NAME, api_id, api_hash) as app:
 
         origem_link = input("Link do canal de origem: ").strip()
         destino_link = input("Link do canal de destino: ").strip()
